@@ -1,14 +1,15 @@
-package collections_test
+package stack_test
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/bmoller/collections"
+	"github.com/bmoller/collections/stack"
 )
 
 func TestEmptyStack(t *testing.T) {
-	stack := collections.NewStack[int]()
+	stack := stack.New[int]()
 
 	if _, err := stack.Peek(); err == nil {
 		t.Fatal("Peek on an empty stack should return an error")
@@ -18,7 +19,7 @@ func TestEmptyStack(t *testing.T) {
 }
 
 func TestStackSearch(t *testing.T) {
-	stack := collections.NewStack[int]()
+	stack := stack.New[int]()
 
 	for _, i := range []int{-1, 9384, 2, 43, -341325, 5892, 132491324} {
 		stack.Push(i)

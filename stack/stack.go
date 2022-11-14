@@ -1,22 +1,11 @@
-package collections
+package stack
 
-import "errors"
+import "github.com/bmoller/collections"
 
 const (
 	stackGrowthFactor int = 2
 	stackInitialSize  int = 100
 )
-
-type Stack[T comparable] interface {
-	Empty() bool
-	Peek() (T, error)
-	Pop() (T, error)
-	Push(T) T
-	Search(T) int
-}
-
-// ErrEmptyStack is returned when either Peek() or Pop() is called on an empty Stack.
-var ErrEmptyStack = errors.New("stack is empty")
 
 type sliceStack[T comparable] struct {
 	data []T
@@ -26,7 +15,7 @@ type sliceStack[T comparable] struct {
 /*
 NewStack creates and returns a new instance of the default Stack implementation.
 */
-func NewStack[T comparable]() Stack[T] {
+func New[T comparable]() collections.Stack[T] {
 	return &sliceStack[T]{
 		data: make([]T, stackInitialSize),
 	}
@@ -47,7 +36,7 @@ An empty Stack will return ErrEmptyStack.
 */
 func (s *sliceStack[T]) Peek() (item T, err error) {
 	if s.size == 0 {
-		err = ErrEmptyStack
+		err = collections.ErrEmptyStack
 	} else {
 		item = s.data[s.size-1]
 	}
