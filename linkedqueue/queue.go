@@ -9,21 +9,21 @@ type queueNode[T comparable] struct {
 	value T
 }
 
-type linkedQueue[T comparable] struct {
+type queue[T comparable] struct {
 	head *queueNode[T]
 	size int
 	tail *queueNode[T]
 }
 
 func New[T comparable]() collections.Queue[T] {
-	return new(linkedQueue[T])
+	return new(queue[T])
 }
 
-func (q *linkedQueue[T]) Empty() bool {
+func (q *queue[T]) Empty() bool {
 	return q.size == 0
 }
 
-func (q *linkedQueue[T]) Peek() (element T, err error) {
+func (q *queue[T]) Peek() (element T, err error) {
 	if q.size == 0 {
 		return element, collections.ErrEmptyQueue
 	}
@@ -31,7 +31,7 @@ func (q *linkedQueue[T]) Peek() (element T, err error) {
 	return q.head.value, nil
 }
 
-func (q *linkedQueue[T]) Pop() (element T, err error) {
+func (q *queue[T]) Pop() (element T, err error) {
 	if q.size == 0 {
 		return element, collections.ErrEmptyQueue
 	}
@@ -43,7 +43,7 @@ func (q *linkedQueue[T]) Pop() (element T, err error) {
 	return element, nil
 }
 
-func (q *linkedQueue[T]) Push(item T) {
+func (q *queue[T]) Push(item T) {
 	element := &queueNode[T]{
 		value: item,
 	}
@@ -59,6 +59,6 @@ func (q *linkedQueue[T]) Push(item T) {
 	q.size++
 }
 
-func (q *linkedQueue[T]) Size() int {
+func (q *queue[T]) Size() int {
 	return q.size
 }

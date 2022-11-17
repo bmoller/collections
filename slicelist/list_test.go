@@ -108,11 +108,11 @@ func TestListGet(t *testing.T) {
 		}
 	}
 
-	indexError := new(collections.ErrInvalidIndex)
+	indexError := new(collections.ErrIndexOutOfRange)
 	if _, err := list.Get(1000); err == nil {
 		t.Fatal("expected error from Get for element out of range")
 	} else if !errors.As(err, indexError) {
-		t.Fatalf("expected ErrInvalidIndex but got: %s", err)
+		t.Fatalf("expected ErrIndexOutOfRange but got: %s", err)
 	}
 
 	list.Clear()
@@ -126,7 +126,7 @@ func TestListGet(t *testing.T) {
 	if _, err := list.Get(500); err == nil {
 		t.Fatal("expected error from Get for element out of range")
 	} else if !errors.As(err, indexError) {
-		t.Fatalf("expected ErrInvalidIndex but got: %s", err)
+		t.Fatalf("expected ErrIndexOutOfRange but got: %s", err)
 	}
 }
 
@@ -196,11 +196,11 @@ func TestListRemove(t *testing.T) {
 		list.Add(i)
 	}
 
-	indexErr := new(collections.ErrInvalidIndex)
+	indexErr := new(collections.ErrIndexOutOfRange)
 	if _, err := list.Remove(9999); err == nil {
 		t.Fatal("expected error on call to Remove index out of range")
 	} else if !errors.As(err, indexErr) {
-		t.Fatalf("expected ErrInvalidIndex but got: %s", err)
+		t.Fatalf("expected ErrIndexOutOfRange but got: %s", err)
 	}
 
 	for i := 0; i < 1000; i++ {
@@ -245,11 +245,19 @@ func TestListSize(t *testing.T) {
 
 func TestListSubList(t *testing.T) {
 	l1 := slicelist.New[int]()
+	if _, err := l1.SubList(0, 0); err == nil {
+		t.Fatal("expected error from SubList on new List")
+	} else if !errors.Is(err, collections.ErrEmptyList) {
+		t.Fatalf("expected ErrEmptyList, got %T", err)
+	}
+
 	for i := 0; i < 1000; i++ {
 		l1.Add(i)
 	}
-	l2 := l1.SubList(250, 750)
-	if l2.Size() != 500 {
+	l2, err := l1.SubList(250, 750)
+	if err != nil {
+		t.Fatalf("unexpected error: %s", err)
+	} else if l2.Size() != 500 {
 		t.Fatalf("expected sublist size of %d but got %d", 500, l2.Size())
 	}
 	for i := 250; i < 750; i++ {
@@ -258,5 +266,29 @@ func TestListSubList(t *testing.T) {
 		} else if element != i {
 			t.Fatalf("expected element %d but not %d", i, element)
 		}
+	}
+
+	rangeErr := new(collections.ErrInvalidRange)
+	if _, err := l1.SubList(-1, 10); err == nil {
+		t.Fatal("expected error from SubList with start less than 0")
+	} else if !errors.As(err, rangeErr) {
+		t.Fatalf("expected ErrInvalidRange, got %T", err)
+	}
+	if _, err := l1.SubList(10, 0); err == nil {
+		t.Fatal("expected error from SubList with end less than start")
+	} else if !errors.As(err, rangeErr) {
+		t.Fatalf("expected ErrInvalidRange, got %T", err)
+	}
+
+	indexErr := new(collections.ErrIndexOutOfRange)
+	if _, err := l1.SubList(1000, 1005); err == nil {
+		t.Fatal("expected error from SubList with start == size")
+	} else if !errors.As(err, indexErr) {
+		t.Fatalf("expected ErrIndexOutOfRange, got %T", err)
+	}
+	if _, err := l1.SubList(0, 1005); err == nil {
+		t.Fatal("expected error from SubList with end > size")
+	} else if !errors.As(err, indexErr) {
+		t.Fatalf("expected ErrIndexOutOfRange, got %T", err)
 	}
 }

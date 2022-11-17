@@ -28,18 +28,27 @@ type List[T comparable] interface {
 	Get(int) (T, error)
 	Insert(int, T) error
 	Remove(int) (T, error)
-	SubList(int, int) List[T]
+	SubList(int, int) (List[T], error)
 }
 
 var ErrEmptyList = errors.New("list is empty")
 
-type ErrInvalidIndex struct {
-	RequestedIndex int
-	Size           int
+type ErrIndexOutOfRange struct {
+	Index int
+	Size  int
 }
 
-func (e ErrInvalidIndex) Error() string {
-	return fmt.Sprintf("index %d is invalid for list of length %d", e.RequestedIndex, e.Size)
+func (e ErrIndexOutOfRange) Error() string {
+	return fmt.Sprintf("index %d is invalid for list of length %d", e.Index, e.Size)
+}
+
+type ErrInvalidRange struct {
+	End   int
+	Start int
+}
+
+func (e ErrInvalidRange) Error() string {
+	return fmt.Sprintf("invalid range with start %d and end %d; valid ranges follow 0 <= start <= end", e.Start, e.End)
 }
 
 // LinkedList

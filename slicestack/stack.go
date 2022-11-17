@@ -7,7 +7,7 @@ const (
 	stackInitialSize  int = 100
 )
 
-type sliceStack[T comparable] struct {
+type stack[T comparable] struct {
 	data []T
 	size int
 }
@@ -16,7 +16,7 @@ type sliceStack[T comparable] struct {
 New creates and returns a new instance of the default Stack implementation.
 */
 func New[T comparable]() collections.Stack[T] {
-	return &sliceStack[T]{
+	return &stack[T]{
 		data: make([]T, stackInitialSize),
 	}
 }
@@ -26,7 +26,7 @@ NewWithSize creates a new Stack, with support for specifying the size of the bac
 In some situations it may be advantageous to allocate the entire size needed if the longest possible length is known.
 */
 func NewWithSize[T comparable](size int) collections.Stack[T] {
-	return &sliceStack[T]{
+	return &stack[T]{
 		data: make([]T, size),
 	}
 }
@@ -34,7 +34,7 @@ func NewWithSize[T comparable](size int) collections.Stack[T] {
 /*
 Empty indicates whether the Stack currently holds any elements.
 */
-func (s *sliceStack[T]) Empty() bool {
+func (s *stack[T]) Empty() bool {
 	return s.size == 0
 }
 
@@ -42,7 +42,7 @@ func (s *sliceStack[T]) Empty() bool {
 Peek returns the element at the top of the Stack without removing it.
 An empty Stack will return ErrEmptyStack.
 */
-func (s *sliceStack[T]) Peek() (item T, err error) {
+func (s *stack[T]) Peek() (item T, err error) {
 	if s.size == 0 {
 		err = collections.ErrEmptyStack
 	} else {
@@ -56,7 +56,7 @@ func (s *sliceStack[T]) Peek() (item T, err error) {
 Pop returns the element at the top of the Stack and removes it from the Stack.
 An empty Stack will return ErrEmptyStack.
 */
-func (s *sliceStack[T]) Pop() (item T, err error) {
+func (s *stack[T]) Pop() (item T, err error) {
 	if s.size == 0 {
 		err = collections.ErrEmptyStack
 	} else {
@@ -70,7 +70,7 @@ func (s *sliceStack[T]) Pop() (item T, err error) {
 /*
 Push adds an element to the top of the stack.
 */
-func (s *sliceStack[T]) Push(item T) {
+func (s *stack[T]) Push(item T) {
 	s.data[s.size] = item
 	s.size++
 	if s.size == cap(s.data) {
@@ -85,6 +85,6 @@ func (s *sliceStack[T]) Push(item T) {
 /*
 Size returns the number of elements currently in the Stack.
 */
-func (s *sliceStack[T]) Size() int {
+func (s *stack[T]) Size() int {
 	return s.size
 }

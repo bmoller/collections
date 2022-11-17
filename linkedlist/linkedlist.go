@@ -46,7 +46,6 @@ func (l *linkedList[T]) Add(item T) {
 		node.previous = oldTail
 		l.tail = node
 	}
-
 	l.size++
 }
 
@@ -62,10 +61,10 @@ func (l *linkedList[T]) Empty() bool {
 func (l *linkedList[T]) Get(index int) (element T, err error) {
 	if l.size == 0 {
 		return element, collections.ErrEmptyList
-	} else if index >= l.size {
-		return element, collections.ErrInvalidIndex{
-			RequestedIndex: index,
-			Size:           l.size,
+	} else if index >= l.size || index < 0 {
+		return element, collections.ErrIndexOutOfRange{
+			Index: index,
+			Size:  l.size,
 		}
 	}
 
@@ -80,10 +79,10 @@ func (l *linkedList[T]) Get(index int) (element T, err error) {
 func (l *linkedList[T]) GetNode(index int) (collections.ListNode[T], error) {
 	if l.size == 0 {
 		return nil, collections.ErrEmptyList
-	} else if index >= l.size-1 {
-		return nil, collections.ErrInvalidIndex{
-			RequestedIndex: index,
-			Size:           l.size,
+	} else if index >= l.size || index < 0 {
+		return nil, collections.ErrIndexOutOfRange{
+			Index: index,
+			Size:  l.size,
 		}
 	}
 
@@ -103,10 +102,10 @@ func (l *linkedList[T]) Insert(index int, item T) error {
 	switch {
 	case l.size == 0:
 		return collections.ErrEmptyList
-	case index > l.size:
-		err := collections.ErrInvalidIndex{
-			RequestedIndex: index,
-			Size:           l.size,
+	case index > l.size, index < 0:
+		err := collections.ErrIndexOutOfRange{
+			Index: index,
+			Size:  l.size,
 		}
 		return err
 	case index == 0:
@@ -131,6 +130,7 @@ func (l *linkedList[T]) Insert(index int, item T) error {
 		current.next.previous = node
 		current.next = node
 	}
+	l.size++
 
 	return nil
 }
@@ -149,12 +149,12 @@ func (l *linkedList[T]) InsertAfter(node collections.ListNode[T], item T) (colle
 		next:      typedNode.next,
 		value:     item,
 	}
-	typedNode.next = newNode
 	if l.tail == typedNode {
 		l.tail = newNode
 	} else {
 		typedNode.next.previous = newNode
 	}
+	typedNode.next = newNode
 	l.size++
 
 	return newNode, nil
@@ -174,12 +174,12 @@ func (l *linkedList[T]) InsertBefore(node collections.ListNode[T], item T) (coll
 		next:      typedNode,
 		value:     item,
 	}
-	typedNode.previous = newNode
 	if l.head == typedNode {
 		l.head = newNode
 	} else {
 		typedNode.previous.next = newNode
 	}
+	typedNode.previous = newNode
 	l.size++
 
 	return newNode, nil
@@ -188,10 +188,10 @@ func (l *linkedList[T]) InsertBefore(node collections.ListNode[T], item T) (coll
 func (l *linkedList[T]) Remove(index int) (element T, err error) {
 	if l.size == 0 {
 		return element, collections.ErrEmptyList
-	} else if index >= l.size {
-		err := collections.ErrInvalidIndex{
-			RequestedIndex: index,
-			Size:           l.size,
+	} else if index >= l.size || index < 0 {
+		err := collections.ErrIndexOutOfRange{
+			Index: index,
+			Size:  l.size,
 		}
 		return element, err
 	}
@@ -209,6 +209,7 @@ func (l *linkedList[T]) Remove(index int) (element T, err error) {
 	if l.head == current {
 		l.head = current.next
 	}
+	l.size--
 
 	return current.value, nil
 }
@@ -230,6 +231,9 @@ func (l *linkedList[T]) RemoveNode(node collections.ListNode[T]) error {
 	if l.head == typedNode {
 		l.head = typedNode.next
 	}
+	if l.tail == typedNode {
+		l.tail = typedNode.previous
+	}
 
 	return nil
 }
@@ -238,7 +242,25 @@ func (l *linkedList[T]) Size() int {
 	return l.size
 }
 
-func (l *linkedList[T]) SubList(start int, end int) collections.List[T] {
+func (l *linkedList[T]) SubList(start int, end int) (collections.List[T], error) {
+	switch {
+	case start < 0 || end < start:
+		return nil, collections.ErrInvalidRange{
+			End:   end,
+			Start: start,
+		}
+	case start >= l.size:
+		return nil, collections.ErrIndexOutOfRange{
+			Index: start,
+			Size:  l.size,
+		}
+	case end > l.size:
+		return nil, collections.ErrIndexOutOfRange{
+			Index: end,
+			Size:  l.size,
+		}
+	}
+
 	current := l.head
 	for i := 0; i < start; i++ {
 		current = current.next
@@ -250,7 +272,7 @@ func (l *linkedList[T]) SubList(start int, end int) collections.List[T] {
 		current = current.next
 	}
 
-	return list
+	return list, nil
 }
 
 func (l *linkedList[T]) Tail() collections.ListNode[T] {

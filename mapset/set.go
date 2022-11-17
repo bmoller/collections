@@ -2,29 +2,29 @@ package mapset
 
 import "github.com/bmoller/collections"
 
-type mapSet[T comparable] struct {
+type set[T comparable] struct {
 	data map[T]bool
 }
 
 func New[T comparable]() collections.Set[T] {
-	return &mapSet[T]{
+	return &set[T]{
 		data: make(map[T]bool),
 	}
 }
 
-func (s *mapSet[T]) Add(item T) {
+func (s *set[T]) Add(item T) {
 	s.data[item] = true
 }
 
-func (s *mapSet[T]) Contains(item T) bool {
+func (s *set[T]) Contains(item T) bool {
 	return s.data[item]
 }
 
-func (s *mapSet[T]) Empty() bool {
+func (s *set[T]) Empty() bool {
 	return len(s.data) == 0
 }
 
-func (s *mapSet[T]) Iterator() collections.Iterator[T] {
+func (s *set[T]) Iterator() collections.Iterator[T] {
 	var (
 		err  error
 		next T
@@ -50,7 +50,7 @@ func (s *mapSet[T]) Iterator() collections.Iterator[T] {
 	}
 }
 
-func (s *mapSet[T]) Pop() (element T, err error) {
+func (s *set[T]) Pop() (element T, err error) {
 	if len(s.data) == 0 {
 		err = collections.ErrEmptySet
 	} else {
@@ -64,11 +64,11 @@ func (s *mapSet[T]) Pop() (element T, err error) {
 	return
 }
 
-func (s *mapSet[T]) Remove(item T) {
+func (s *set[T]) Remove(item T) {
 	delete(s.data, item)
 }
 
-func (s *mapSet[T]) Size() int {
+func (s *set[T]) Size() int {
 	return len(s.data)
 }
 
@@ -87,7 +87,7 @@ func Union[T comparable](a, b collections.Set[T]) collections.Set[T] {
 		element, err = itr()
 	}
 
-	return &mapSet[T]{
+	return &set[T]{
 		data: result,
 	}
 }
@@ -103,7 +103,7 @@ func Intersection[T comparable](a, b collections.Set[T]) collections.Set[T] {
 		element, err = itr()
 	}
 
-	return &mapSet[T]{
+	return &set[T]{
 		data: result,
 	}
 }
@@ -119,7 +119,7 @@ func Difference[T comparable](a, b collections.Set[T]) collections.Set[T] {
 		element, err = itr()
 	}
 
-	return &mapSet[T]{
+	return &set[T]{
 		data: result,
 	}
 }
