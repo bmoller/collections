@@ -1,3 +1,10 @@
+/*
+Package mapset is a map-backed implementation of [collections.Set].
+
+All index and capacity operations are handled by the backing map, so performance should match the performance of a map of the same size.
+No order of elements is guaranteed, even between successive calls to Pop.
+*/
+
 package mapset
 
 import "github.com/bmoller/collections"
@@ -72,6 +79,10 @@ func (s *set[T]) Size() int {
 	return len(s.data)
 }
 
+/*
+Union returns the result of a set union between a and b, as a new Set.
+A union includes all elements from both parent sets.
+*/
 func Union[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	result := make(map[T]bool)
 	itr := a.Iterator()
@@ -92,6 +103,10 @@ func Union[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	}
 }
 
+/*
+Intersection returns the set intersection of a and b, as a new Set.
+An intersection includes only those items which are common to both parent sets.
+*/
 func Intersection[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	result := make(map[T]bool)
 	itr := a.Iterator()
@@ -108,6 +123,10 @@ func Intersection[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	}
 }
 
+/*
+Difference determines the set difference between a and b, and returns it as a new Set.
+Difference includes only those elements which are unique to either parent Set.
+*/
 func Difference[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	result := make(map[T]bool)
 	itr := a.Iterator()
@@ -124,6 +143,10 @@ func Difference[T comparable](a, b collections.Set[T]) collections.Set[T] {
 	}
 }
 
+/*
+IsSubset checks if Set a is a subset of Set b.
+The Set a is a subset if all of its elements are also in Set b.
+*/
 func IsSubset[T comparable](a, b collections.Set[T]) bool {
 	itr := a.Iterator()
 	element, err := itr()

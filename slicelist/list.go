@@ -1,3 +1,9 @@
+/*
+Package slicelist provides an array/slice-backed implementation of [collections.List].
+
+Whenever the List grows beyond the bounds of its current backing storage a new slice is created and all elements are copied.
+*/
+
 package slicelist
 
 import "github.com/bmoller/collections"
@@ -12,15 +18,16 @@ type list[T comparable] struct {
 	size int
 }
 
-/*
-NewList creates and returns a new List backed by a Go slice.
-*/
 func New[T comparable]() collections.List[T] {
 	return &list[T]{
 		data: make([]T, initialSize),
 	}
 }
 
+/*
+NewFromItems creates a new List with all elements of items as its contents.
+The order of items is preserved.
+*/
 func NewFromItems[T comparable](items []T) collections.List[T] {
 	return &list[T]{
 		data: items,
@@ -28,6 +35,10 @@ func NewFromItems[T comparable](items []T) collections.List[T] {
 	}
 }
 
+/*
+NewWithSize allows the user control over the initial size of the backing slice.
+A new List is created and returned with size as its capacity.
+*/
 func NewWithSize[T comparable](size int) collections.List[T] {
 	return &list[T]{
 		data: make([]T, size),

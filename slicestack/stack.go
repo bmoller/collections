@@ -1,10 +1,16 @@
+/*
+The slicestack package provides a Stack implementation backed by a slice.
+
+The Stack inserts and removes items into and from the slice and tracks the top via an internal pointer
+*/
+
 package slicestack
 
 import "github.com/bmoller/collections"
 
 const (
-	stackGrowthFactor int = 2
-	stackInitialSize  int = 100
+	stackGrowthFactor int = 2   // Length of the backing array is multiplied by this when a replacement is allocated
+	stackInitialSize  int = 100 // The initial size of the backing array and slice
 )
 
 type stack[T comparable] struct {
@@ -12,9 +18,6 @@ type stack[T comparable] struct {
 	size int
 }
 
-/*
-New creates and returns a new instance of the default Stack implementation.
-*/
 func New[T comparable]() collections.Stack[T] {
 	return &stack[T]{
 		data: make([]T, stackInitialSize),
@@ -31,17 +34,10 @@ func NewWithSize[T comparable](size int) collections.Stack[T] {
 	}
 }
 
-/*
-Empty indicates whether the Stack currently holds any elements.
-*/
 func (s *stack[T]) Empty() bool {
 	return s.size == 0
 }
 
-/*
-Peek returns the element at the top of the Stack without removing it.
-An empty Stack will return ErrEmptyStack.
-*/
 func (s *stack[T]) Peek() (item T, err error) {
 	if s.size == 0 {
 		err = collections.ErrEmptyStack
@@ -52,10 +48,6 @@ func (s *stack[T]) Peek() (item T, err error) {
 	return
 }
 
-/*
-Pop returns the element at the top of the Stack and removes it from the Stack.
-An empty Stack will return ErrEmptyStack.
-*/
 func (s *stack[T]) Pop() (item T, err error) {
 	if s.size == 0 {
 		err = collections.ErrEmptyStack
@@ -67,9 +59,6 @@ func (s *stack[T]) Pop() (item T, err error) {
 	return
 }
 
-/*
-Push adds an element to the top of the stack.
-*/
 func (s *stack[T]) Push(item T) {
 	s.data[s.size] = item
 	s.size++
@@ -82,9 +71,6 @@ func (s *stack[T]) Push(item T) {
 	}
 }
 
-/*
-Size returns the number of elements currently in the Stack.
-*/
 func (s *stack[T]) Size() int {
 	return s.size
 }

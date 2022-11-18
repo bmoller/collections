@@ -1,3 +1,9 @@
+/*
+Package linkedqueue provides an implementation of [collections.Queue] backed by individual node instances.
+Each element added to the queue is stored in a node, with a pointer to the next node.
+The queue maintains references to the next node to return and the tail for fast Pop and Push operations.
+*/
+
 package linkedqueue
 
 import (

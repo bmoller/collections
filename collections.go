@@ -1,3 +1,10 @@
+/*
+Package collections provides basic data structures for a variety of purposes.
+
+Implementations are not guaranteed to be stable, but all functionality is exposed via interfaces for a stable API.
+Some interfaces have multiple implementations; consideration should be given to how the structure will be used when making a choice.
+*/
+
 package collections
 
 import (
@@ -183,6 +190,12 @@ var ErrEmptySet = errors.New("stack is empty")
 
 // Stack
 
+/*
+A Stack is an ordered group of items from which the last added is the first returned.
+The common analogy is a stack of clean plates at a buffet or cafeteria; when one is removed, another rises to take its place.
+A new element is added to the top of the Stack (first for retrieval) with a call to Push.
+Peek and Pop return the next value from the Stack, with Peek retaining the value on the Stack and Pop removing it.
+*/
 type Stack[T comparable] interface {
 	Collection[T]
 
@@ -191,5 +204,7 @@ type Stack[T comparable] interface {
 	Push(T)
 }
 
-// ErrEmptyStack is returned when Peek or Pop are called on an empty Stack.
+/*
+ErrEmptyStack is returned when Peek or Pop are called on an empty Stack.
+*/
 var ErrEmptyStack = errors.New("stack is empty")
