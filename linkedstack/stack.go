@@ -1,9 +1,10 @@
+// ©2022 Brandon Moller
+
 /*
 Package linkedstack includes an implementation of Stack that is backed by individual node instances.
 Each node contains its element of the Stack as a value, and a pointer to the next node to be on top when removed.
 There is no backing slice or other structure to scale, so performance should be high.
 */
-
 package linkedstack
 
 import "github.com/bmoller/collections"

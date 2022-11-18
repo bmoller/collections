@@ -1,3 +1,5 @@
+// ©2022 Brandon Moller
+
 package linkedlist_test
 
 import (

@@ -1,9 +1,10 @@
+// ©2022 Brandon Moller
+
 /*
 Package linkedlist is an implementation of [collections.LinkedList] backed by individual list nodes.
 The list is doubly-linked and can be traversed in either direction from any node in the list.
 For methods with nodes as their parameters, lists verify that the nodes are members of the receiving list.
 */
-
 package linkedlist
 
 import "github.com/bmoller/collections"

@@ -1,10 +1,11 @@
+// ©2022 Brandon Moller
+
 /*
 Package mapset is a map-backed implementation of [collections.Set].
 
 All index and capacity operations are handled by the backing map, so performance should match the performance of a map of the same size.
 No order of elements is guaranteed, even between successive calls to Pop.
 */
-
 package mapset
 
 import "github.com/bmoller/collections"

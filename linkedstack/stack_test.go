@@ -1,3 +1,5 @@
+// ©2022 Brandon Moller
+
 package linkedstack_test
 
 import (

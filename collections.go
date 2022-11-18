@@ -1,10 +1,11 @@
+// ©2022 Brandon Moller
+
 /*
 Package collections provides basic data structures for a variety of purposes.
 
 Implementations are not guaranteed to be stable, but all functionality is exposed via interfaces for a stable API.
 Some interfaces have multiple implementations; consideration should be given to how the structure will be used when making a choice.
 */
-
 package collections
 
 import (

@@ -1,9 +1,10 @@
+// ©2022 Brandon Moller
+
 /*
 Package slicelist provides an array/slice-backed implementation of [collections.List].
 
 Whenever the List grows beyond the bounds of its current backing storage a new slice is created and all elements are copied.
 */
-
 package slicelist
 
 import "github.com/bmoller/collections"

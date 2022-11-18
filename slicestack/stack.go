@@ -1,9 +1,10 @@
+// ©2022 Brandon Moller
+
 /*
 The slicestack package provides a Stack implementation backed by a slice.
 
 The Stack inserts and removes items into and from the slice and tracks the top via an internal pointer
 */
-
 package slicestack
 
 import "github.com/bmoller/collections"

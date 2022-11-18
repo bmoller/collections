@@ -1,3 +1,5 @@
+// ©2002 Brandon Moller
+
 package collections_test
 
 import (
